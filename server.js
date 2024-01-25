@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import { getEpisodeInfo } from "./lib/index.js"
 import { fetcher } from "./lib/utils.js"
+import myList from "./animes.json" assert { type: "json" }
 
 const app = express()
 const port = process.env.PORT || 5050
@@ -11,16 +12,28 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.set("json spaces", 2)
 
-app.get("/api/youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season", async (req, res) => {
-  const anime = "youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season"
-  const { data, ...response } = await getEpisodeInfo(anime)
-  const result = await Promise.all(data[0].map(async item => {
-    const request = await fetcher(item.episode)
+app.get("/", (req, res) => {
+  res.status(200).json({ endpoints: "/anime", animesAvaliable: myList })
+})
 
-    return request.data
-  }))
+app.get("/anime/:anime", async (req, res) => {
+  const anime = req.params.anime
 
-  res.status(200).json({ response, result })
+  if (!anime || anime === "") return res.status(400).json({ message: "Anime not provided" })
+
+  try {
+    const { data, ...response } = await getEpisodeInfo(anime)
+    const result = await Promise.all(data[0].map(async item => {
+      const request = await fetcher(item.episode)
+
+      return request.data
+    }))
+
+    res.status(200).json({ response, result })
+  } catch (err) {
+    res.status(404).json({ message: "Anime not found" })
+    console.error(err)
+  }
 })
 
 app.use((req, res) => {
