@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.set("json spaces", 2)
 
-app.get("/youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season", async (req, res) => {
+app.get("/api/youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season", async (req, res) => {
   const anime = "youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season"
   const { data, ...response } = await getEpisodeInfo(anime)
   const result = await Promise.all(data[0].map(async item => {
