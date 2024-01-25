@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch lib/index",
-    "start": "node --watch server"
+    "start": "node server"
   },
   "repository": {
     "type": "git",
