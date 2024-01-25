@@ -40,6 +40,11 @@ Para rodar o projeto, basta executar o comando:
 npm start
 ```
 
+## Rotas
+
+- **/anime** - Retorna todos os animes disponíveis no arquivo animes.json.
+- **/anime/:anime** - Retorna todos os episódios do anime escolhido.
+
 ## Contribuição
 
 Contribuição é sempre bem vinda, então se você tiver alguma ideia de melhoria, basta fazer um fork do projeto e criar uma pull request.
