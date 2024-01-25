@@ -2,7 +2,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/youkoso-jitsuryoku-shijou-shugi-no-kyoushitsu-e-3rd-season",
+      "src": "/api",
       "dest": "/server.js"
     }
   ]
