@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.set("json spaces", 2)
 
 app.get("/", (req, res) => {
-  res.status(200).json({ endpoints: "/anime", animesAvaliable: myList })
+  return res.status(200).json({ endpoints: "/anime", animesAvaliable: myList })
 })
 
 app.get("/anime/:anime", async (req, res) => {
@@ -29,7 +29,7 @@ app.get("/anime/:anime", async (req, res) => {
       return request.data
     }))
 
-    res.status(200).json({ response, result })
+    return res.status(200).json({ response, result })
   } catch (err) {
     res.status(404).json({ message: "Anime not found" })
     console.error(err)
@@ -37,7 +37,7 @@ app.get("/anime/:anime", async (req, res) => {
 })
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Page not found" })
+  return res.status(404).json({ message: "Page not found" })
 })
 
 app.listen(port, () => {
