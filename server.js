@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import cors from "cors"
 import { getEpisodeInfo, searchAnime } from "./lib/index.js"
 import { filterEpisodes, readJsonFile } from "./lib/utils.js"
@@ -35,9 +35,14 @@ app.get("/anime/search", async (req, res) => {
 app.get("/anime/:anime", async (req, res) => {
   try {
     const anime = req.params.anime
-    const { data, ...response } = await getEpisodeInfo(anime)
+    const info = await getEpisodeInfo(anime)
 
-    if (!data) return res.status(404).json({ message: "Anime not found" })
+    if (!info.data) return res.status(404).json({ message: "Anime not found" })
+
+    const { data, ...response } = info
+    // const { data, ...response } = await getEpisodeInfo(anime)
+
+    // if (!data) return res.status(404).json({ message: "Anime not found" })
 
     res.json({ ...response, episodes: filterEpisodes(data) })
   } catch (err) {
