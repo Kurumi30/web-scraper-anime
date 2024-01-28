@@ -1,7 +1,7 @@
 # WEB-ANIME
 
 <p align="center">
-  <img src="https://animefire.plus/uploads/cmt/2845312_1687951782.webp"/>
+  <img src="./assets/kyouka.gif"/>
 </p>
 
 ## Descrição
