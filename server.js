@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import { getEpisodeInfo } from "./lib/index.js"
+import { getEpisodeInfo, searchAnime } from "./lib/index.js"
 import { fetcher } from "./lib/utils.js"
 import myList from "./animes.json" assert { type: "json" }
 
@@ -16,6 +16,22 @@ app.get("/", (req, res) => {
   return res.status(200).json({ endpoints: "/anime", animesAvaliable: myList })
 })
 
+app.get("/anime/search", async (req, res) => {
+  const query = req.query.q
+
+  if (!query) return res.status(400).json({ message: "Query not provided" })
+
+  try {
+    const result = await searchAnime(query)
+
+    if (!result.length) return res.status(404).json({ message: "Anime not found" })
+
+    return res.status(200).json({ result })
+  } catch (err) {
+    console.error(err)
+  }
+})
+
 app.get("/anime/:anime", async (req, res) => {
   const anime = req.params.anime
 
@@ -23,16 +39,31 @@ app.get("/anime/:anime", async (req, res) => {
 
   try {
     const { data, ...response } = await getEpisodeInfo(anime)
-    const result = await Promise.all(data[0].map(async item => {
+
+    // if (!data || !Array.isArray(data) || data.length === 0) {
+    //   return res.status(404).json({ message: "No data found for this anime" })
+    // }
+
+    // if (!response || !response.data) {
+    //   console.error(`No data returned for episode: ${item.episode}`)
+
+    //   return null
+    // }
+
+    const result = await data.map(async item => {
       const request = await fetcher(item.episode)
 
-      return request.data
-    }))
+      if (!request) return null
 
-    return res.status(200).json({ response, result })
+      return request
+    })
+
+    // const filteredResult = result.filter(item => item !== null)
+
+    return res.status(200).json({ response, result: result[0] })
   } catch (err) {
-    res.status(404).json({ message: "Anime not found" })
     console.error(err)
+    return res.status(404).json({ message: "Anime not found" })
   }
 })
 
