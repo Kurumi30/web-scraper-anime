@@ -1,8 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { getEpisodeInfo, searchAnime } from "./lib/index.js"
-import { filterEpisodes } from "./lib/utils.js"
-import myList from "./animes.json" assert { type: "json" }
+import { filterEpisodes, readJsonFile } from "./lib/utils.js"
 
 const app = express()
 const port = process.env.PORT || 5050
@@ -13,7 +12,8 @@ app.use(express.urlencoded({ extended: true }))
 app.set("json spaces", 2)
 
 app.get("/", (req, res) => {
-  return res.status(200).json({ endpoints: "/anime", animesAvaliable: myList })
+  const myList = readJsonFile("./animes.json")
+  return res.status(200).json({ endpoints: ["/anime", "search?q="], animesAvaliable: myList })
 })
 
 app.get("/anime/search", async (req, res) => {
@@ -33,11 +33,8 @@ app.get("/anime/search", async (req, res) => {
 })
 
 app.get("/anime/:anime", async (req, res) => {
-  const anime = req.params.anime
-
-  if (!anime || anime === "") return res.status(400).json({ message: "Anime not provided" })
-
   try {
+    const anime = req.params.anime
     const { data, ...response } = await getEpisodeInfo(anime)
 
     if (!data) return res.status(404).json({ message: "Anime not found" })
