@@ -1,6 +1,6 @@
 {
   "name": "web-scrape-anime",
-  "version": "1.2.3",
+  "version": "1.3.5",
   "description": "criar uma api própria para assistir animes",
   "main": "index.js",
   "type": "module",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kurumi30/"
+    "url": "https://github.com/Kurumi30/web-scraper-anime"
   },
   "keywords": [
     "js",

@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }))
 app.set("json spaces", 2)
 
 app.get("/", (req, res) => {
-  const myList = readJsonFile("./animes.json")
+  const myList = readJsonFile("./assets/animes.json")
   return res.status(200).json({ endpoints: ["/anime", "search?q="], animesAvaliable: myList })
 })
 
