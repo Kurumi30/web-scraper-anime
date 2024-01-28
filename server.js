@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { getEpisodeInfo, searchAnime } from "./lib/index.js"
-import { fetcher } from "./lib/utils.js"
+import { filterEpisodes } from "./lib/utils.js"
 import myList from "./animes.json" assert { type: "json" }
 
 const app = express()
@@ -40,30 +40,12 @@ app.get("/anime/:anime", async (req, res) => {
   try {
     const { data, ...response } = await getEpisodeInfo(anime)
 
-    // if (!data || !Array.isArray(data) || data.length === 0) {
-    //   return res.status(404).json({ message: "No data found for this anime" })
-    // }
+    if (!data) return res.status(404).json({ message: "Anime not found" })
 
-    // if (!response || !response.data) {
-    //   console.error(`No data returned for episode: ${item.episode}`)
-
-    //   return null
-    // }
-
-    const result = await data.map(async item => {
-      const request = await fetcher(item.episode)
-
-      if (!request) return null
-
-      return request
-    })
-
-    // const filteredResult = result.filter(item => item !== null)
-
-    return res.status(200).json({ response, result: result[0] })
+    res.json({ ...response, episodes: filterEpisodes(data) })
   } catch (err) {
     console.error(err)
-    return res.status(404).json({ message: "Anime not found" })
+    return res.status(500).json({ message: "Internal server error" })
   }
 })
 
