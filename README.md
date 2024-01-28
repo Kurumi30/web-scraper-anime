@@ -1,5 +1,9 @@
 # WEB-ANIME
 
+<p align="center">
+  <img src="https://animefire.plus/uploads/cmt/2845312_1687951782.webp"/>
+</p>
+
 ## Descrição
 
 Um webscrapper que pega os episódios de animes do site **AnimeFire** e os disponibiliza em forma de API.<br>
@@ -43,6 +47,7 @@ npm start
 ## Rotas
 
 - **/anime** - Retorna todos os animes disponíveis no arquivo animes.json.
+- **/anime/search?q=** - Busca por animes em geral
 - **/anime/:anime** - Retorna todos os episódios do anime escolhido.
 
 ## Contribuição
